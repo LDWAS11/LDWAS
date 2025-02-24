@@ -7,4 +7,8 @@ export(genome_wide_threshold)
 export(get_significant_snps)
 export(manhattan_plot)
 export(qq_plot)
+<<<<<<< HEAD
+=======
+export(run_LDWAS)
+>>>>>>> d72c2305b517db46d74d7c36ff9f1ebbcec181cc
 export(simulate_and_compare)
