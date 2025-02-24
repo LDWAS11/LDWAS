@@ -1,0 +1,11 @@
+---
+title: "Simulation function"
+output: html_document
+---
+
+## Simulation Function
+
+The `simulate_and_compare` function allows users to compare the performance of LDWAS and GWASbyCor through simulation. Here’s an example of how to use it:
+
+```R
+simulation_results <- simulate_and_compare(n = 100, m = 1000, num_causal = 10, effect_size = 0.5, num_covariates = 2, num_replicates = 30)

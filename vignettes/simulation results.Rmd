@@ -1,0 +1,39 @@
+---
+title: "simulation results"
+output: html_document
+---
+
+## Simulation Results
+
+We compared the performance of LDWAS and GWASbyCor using a simulation study with 30 replicates. The results are summarized below:
+
+set.seed(100)
+
+### Statistical Power
+- LDWAS: Mean power = 0.0467
+- GWASbyCor: Mean power = 0.0467
+
+### False Positive Rate
+- LDWAS: Mean FPR = 0.0000673
+- GWASbyCor: Mean FPR = 0.0000337
+
+### Runtime
+- LDWAS: Mean runtime = 1.23 seconds
+- GWASbyCor: Mean runtime = 0.445 seconds
+
+set.seed(200)
+
+### Statistical Power
+- LDWAS: Mean power = 0.0367
+- GWASbyCor: Mean power = 0.0433
+
+### False Positive Rate
+- LDWAS: Mean FPR = 0
+- GWASbyCor: Mean FPR = 0
+
+### Runtime
+- LDWAS: Mean runtime = 1.23 seconds
+- GWASbyCor: Mean runtime = 0.444 seconds
+
+### Conclusion
+LDWAS did not outperform GWASbyCor in terms of statistical power, false positive rate and computational speed. LDWAS seem similar to GWASbyCor in terms of statistical power and false positive rate. However, GWASbyCor seem to better in terms of computational speed.

@@ -1,0 +1,192 @@
+---
+title: "LDWAS: User Manual & Tutorial"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{tutorial}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(LDWAS)
+```
+---
+title: "LDWAS: User Manual & Tutorial"
+output: pdf_document
+---
+
+###1Table of Contents
+##Introduction
+#Overview of the Package
+#Installation Instructions
+
+##2Package Functions
+#run_LDWAS
+#GWAS_GLM
+#GWASbyCor
+#PCA_Cofactors
+#simulate_and_compare
+
+##3User Guidance
+#Step-by-Step Tutorials
+#Example Workflow
+
+##4Common Questions and Answers
+#Troubleshooting Guide
+#Frequently Asked Questions (FAQs)
+
+
+Description of Package Functions
+1. run_LDWAS
+Purpose: Performs LD-aware GWAS using GLM while incorporating principal components (PCs) as covariates.
+
+Inputs:
+
+y: Phenotype vector (n x 1).
+
+X: Genotype matrix (n x m).
+
+C: Covariate matrix (n x t).
+
+snp_info: SNP information data frame.
+
+num_pcs: Number of PCs to extract (default: 10).
+
+threshold: Tolerance for linear dependence (default: 1e-6).
+
+alpha: Significance level (default: 0.05).
+
+Outputs:
+
+p_values: Vector of p-values for each SNP.
+
+significant_snps: Data frame of significantly associated SNPs.
+
+manhattan_plot: Manhattan plot of p-values.
+
+qq_plot: QQ plot of p-values.
+
+2. GWAS_GLM
+Purpose: Performs GWAS using a Generalized Linear Model (GLM).
+
+Inputs:
+
+y: Phenotype vector (n x 1).
+
+X: Genotype matrix (n x m).
+
+C: Covariate matrix (n x t).
+
+Outputs:
+
+p_values: Vector of p-values for each SNP.
+
+3. GWASbyCor
+Purpose: Performs GWAS by testing the correlation between each SNP and the phenotype.
+
+Inputs:
+
+y: Phenotype vector (n x 1).
+
+X: Genotype matrix (n x m).
+
+C: Covariate matrix (n x t).
+
+Outputs:
+
+p_values: Vector of p-values for each SNP.
+
+significant_snps: Data frame of significantly associated SNPs.
+
+4. PCA_Cofactors
+Purpose: Performs PCA on genotype data and excludes PCs that are linearly dependent on covariates.
+
+Inputs:
+
+X: Genotype matrix (n x m).
+
+C: Covariate matrix (n x t).
+
+threshold: Tolerance for linear dependence (default: 1e-6).
+
+Outputs:
+
+pcs: Matrix of selected PCs (n x k).
+
+5. simulate_and_compare
+Purpose: Simulates genotype and phenotype data, runs LDWAS and GWASbyCor, and compares their performance.
+
+Inputs:
+
+n: Number of individuals.
+
+m: Number of SNPs.
+
+num_causal: Number of causal SNPs.
+
+effect_size: Effect size of causal SNPs.
+
+num_covariates: Number of covariates.
+
+num_replicates: Number of replicates.
+
+Outputs:
+
+Data frame with performance metrics (power, FPR, precision, recall, runtime).
+
+
+# Introduction
+
+LDWAS is a package that performs PCA and incorporate PCs as cofactors for GWAS; it also automatically exclude the PCs that are in linear dependence with the covariates provided by users. The package also generates several diagnostic plots and analyses.
+
+# Description of Package Functions
+
+## `run_LDWAS`
+
+The primary function in this package is `run_LDWAS`, which performs GWAS while incorporating principal components and generating several outputs. Here's a description of the key parameters:
+
+
+##Step-by-Step Tutorial
+
+install.packages("devtools")
+devtools::install_github("yourusername/LDWAS")
+library(LDWAS)
+
+##Simulate Data
+set.seed(123)
+y <- rnorm(100)  # Phenotype
+X <- matrix(sample(0:2, 100 * 1000, replace = TRUE), nrow = 100)  # Genotype
+C <- matrix(rnorm(100 * 2), nrow = 100)  # Covariates
+snp_info <- data.frame(SNP = paste0("rs", 1:1000), Chromosome = rep(1:10, each = 100), Position = 1:1000)
+
+##Run LDWAS
+results <- run_LDWAS(y, X, C, snp_info, correction_method = "fdr")
+print(results$significant_snps)
+
+##Compare Methods
+simulation_results <- simulate_and_compare(n = 100, m = 1000, num_causal = 10, effect_size = 0.5, num_covariates = 2, num_replicates = 30)
+print(simulation_results)
+
+
+##Common Questions and Answers
+Q1: Why am I getting an error about the pipe operator (%>%)?
+A: The pipe operator is part of the dplyr package. Load dplyr using library(dplyr).
+
+Q2: Why are no significant SNPs being detected?
+A: This could be due to a low effect size or a strict significance threshold. Try reducing the alpha value or increasing the effect_size.
+
+Q3: How do I interpret the Manhattan plot?
+A: The Manhattan plot shows the p-values for each SNP across the genome. Peaks above the significance threshold indicate potential associations.
+
+Q4: Can I use this package for binary traits?
+A: Yes, use the family = binomial() argument in the GWAS_GLM function.
+
+Q5: How do I handle missing data?
+A: The package automatically removes SNPs with missing or constant values. You can also preprocess your data to impute missing values.
